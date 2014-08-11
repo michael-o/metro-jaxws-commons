@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
+ *
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
- * 
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -10,7 +10,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -19,9 +19,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- * 
+ *
  * Contributor(s):
- * 
+ *
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -35,9 +35,14 @@
  */
 package com.sun.xml.ws.transport.http.servlet;
 
+import org.springframework.web.context.ConfigurableWebApplicationContext;
+import org.springframework.web.context.ConfigurableWebEnvironment;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.web.context.support.XmlWebApplicationContext;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -59,23 +64,46 @@ public class WSSpringServlet extends HttpServlet {
 
     private static final long serialVersionUID = -2786173009814679147L;
 
+    private WebApplicationContext webApplicationContext;
     private WSServletDelegate delegate;
 
     public void init(ServletConfig servletConfig) throws ServletException {
         super.init(servletConfig);
 
         // get the configured adapters from Spring
-        WebApplicationContext wac = WebApplicationContextUtils
+        WebApplicationContext rootContext = WebApplicationContextUtils
             .getRequiredWebApplicationContext(getServletContext());
+
+        ConfigurableWebApplicationContext cwac =
+            (ConfigurableWebApplicationContext) BeanUtils
+                .instantiateClass(XmlWebApplicationContext.class);
+
+        cwac.setParent(rootContext);
+        cwac.setConfigLocation("/WEB-INF/spring/jaxws/*.xml");
+
+        cwac.setId("jaxws-context");
+        cwac.setServletContext(getServletContext());
+        cwac.setServletConfig(servletConfig);
+        cwac.setNamespace(servletConfig.getServletName());
+
+        ConfigurableEnvironment env = cwac.getEnvironment();
+        if (env instanceof ConfigurableWebEnvironment) {
+            ((ConfigurableWebEnvironment) env).initPropertySources(
+                    getServletContext(), servletConfig);
+		}
+
+        cwac.refresh();
+
+        this.webApplicationContext = cwac;
 
         Set<SpringBinding> bindings = new LinkedHashSet<SpringBinding>();
 
         // backward compatibility. recognize all bindings
-        Map<String, SpringBindingList> m = wac.getBeansOfType(SpringBindingList.class);
+        Map<String, SpringBindingList> m = cwac.getBeansOfType(SpringBindingList.class);
         for (SpringBindingList sbl : m.values())
             bindings.addAll(sbl.getBindings());
 
-        bindings.addAll( wac.getBeansOfType(SpringBinding.class).values() );
+        bindings.addAll( cwac.getBeansOfType(SpringBinding.class).values() );
 
         // create adapters
         ServletAdapterList l = new ServletAdapterList(getServletContext());
@@ -91,11 +119,9 @@ public class WSSpringServlet extends HttpServlet {
      */
     @Override
     public void destroy() {
-        WebApplicationContext wac =
-                WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-        if (wac instanceof ConfigurableApplicationContext) {
-            ((ConfigurableApplicationContext) wac).close();
-        }
+        if (this.webApplicationContext instanceof ConfigurableApplicationContext) {
+			((ConfigurableApplicationContext) this.webApplicationContext).close();
+		}
         delegate.destroy();
         delegate = null;
     }
