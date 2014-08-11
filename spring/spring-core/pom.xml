@@ -10,14 +10,14 @@
   <groupId>org.jvnet.jax-ws-commons.spring</groupId>
   <artifactId>jaxws-spring</artifactId>
   <packaging>jar</packaging>
-  
+
   <name>Spring support extension</name>
   <description>Configure JAX-WS with Spring</description>
 
   <properties>
     <jax-ws-version>2.2.8</jax-ws-version>
     <metro-version>2.2.8-promoted-b146</metro-version>
-    <spring-version>3.2.3.RELEASE</spring-version>
+    <spring-version>4.0.6.RELEASE</spring-version>
     <xbean-version>3.14</xbean-version>
   </properties>
 
@@ -103,7 +103,7 @@
               <tasks>
                 <delete file="target/xbean/META-INF/spring.handlers" />
                 <delete file="target/xbean/META-INF/spring.schemas" />
-                
+
                 <!-- copy the HTML files to site -->
                 <mkdir dir="target/site/references" />
                 <copy todir="target/site/references">
