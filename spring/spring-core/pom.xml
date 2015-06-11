@@ -15,10 +15,10 @@
   <description>Configure JAX-WS with Spring</description>
 
   <properties>
-    <jax-ws-version>2.2.8</jax-ws-version>
-    <metro-version>2.2.8-promoted-b146</metro-version>
-    <spring-version>4.0.6.RELEASE</spring-version>
-    <xbean-version>3.14</xbean-version>
+    <jax-ws-version>2.2.11</jax-ws-version>
+    <metro-version>2.2.10</metro-version>
+    <spring-version>4.1.6.RELEASE</spring-version>
+    <xbean-version>3.18</xbean-version>
   </properties>
 
   <distributionManagement>
