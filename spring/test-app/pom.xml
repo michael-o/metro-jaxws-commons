@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.jvnet.jax-ws-commons</groupId>
     <artifactId>spring</artifactId>
-    <version>1.10-dynamowerk-1</version>
+    <version>1.10-dynamowerk-2-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   
@@ -49,7 +49,7 @@
     <dependency>
       <groupId>org.jvnet.jax-ws-commons.spring</groupId>
       <artifactId>jaxws-spring</artifactId>
-      <version>${version}</version>
+      <version>${project.version}</version>
     </dependency>
     <!--
       for this test to run correctly we need more recent SJSXP,
