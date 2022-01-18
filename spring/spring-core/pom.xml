@@ -15,8 +15,8 @@
   <description>Configure JAX-WS with Spring</description>
 
   <properties>
-    <jax-ws-version>2.2.11</jax-ws-version>
-    <metro-version>2.2.10</metro-version>
+    <jax-ws-version>2.3.3</jax-ws-version>
+    <metro-version>2.3.5</metro-version>
     <spring-version>4.3.30.RELEASE</spring-version>
     <xbean-version>3.18</xbean-version>
   </properties>
@@ -134,8 +134,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>javax.xml.ws</groupId>
-      <artifactId>jaxws-api</artifactId>
+      <groupId>jakarta.xml.ws</groupId>
+      <artifactId>jakarta.xml.ws-api</artifactId>
       <version>${jax-ws-version}</version>
     </dependency>
     <dependency>
