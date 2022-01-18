@@ -17,7 +17,7 @@
   <properties>
     <jax-ws-version>2.2.11</jax-ws-version>
     <metro-version>2.2.10</metro-version>
-    <spring-version>4.1.6.RELEASE</spring-version>
+    <spring-version>4.3.30.RELEASE</spring-version>
     <xbean-version>3.18</xbean-version>
   </properties>
 
