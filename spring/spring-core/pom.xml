@@ -186,12 +186,6 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
-    <!-- shouldn't be needed once JAX-WS RT POM properly declares the dependency -->
-    <dependency>
-      <groupId>javax.jws</groupId>
-      <artifactId>jsr181-api</artifactId>
-      <version>1.0-MR1</version>
-    </dependency>
   </dependencies>
 
   <!-- sorcerer needs Mustang, but Mustang won't work with JAXB/WS 2.1
