@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>spring</artifactId>
-  <version>1.10-dynamowerk-4-SNAPSHOT</version>
+  <version>1.10-dynamowerk-4</version>
   <packaging>pom</packaging>
   
   <name>Spring support extension</name>
